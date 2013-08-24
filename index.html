@@ -1,0 +1,110 @@
+<!DOCTYPE html><!--[if lt IE 7]><html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"></html><![endif]--><!--[if IE 7]><html lang="en" class="no-js lt-ie9 lt-ie8"></html><![endif]--><!--[if IE 8]><html lang="en" class="no-js lt-ie9"></html><![endif]--><!--[if gt IE 8]><!--><html lang="en" class="no-js"><!--<![endif]--><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>(Modern) JavaScript Testing</title><meta name="description" content=""><meta name="viewport" content="width=1024, user-scalable=no"><!-- Required stylesheets--><link rel="stylesheet" href="core/deck.core.css"><!-- Starter kit custom styles.--><link rel="stylesheet" href="css/slides.custom.css"><!-- Extension CSS files go here. Remove or add as needed.--><link rel="stylesheet" href="extensions/goto/deck.goto.css"><link rel="stylesheet" href="extensions/menu/deck.menu.css"><link rel="stylesheet" href="extensions/navigation/deck.navigation.css"><link rel="stylesheet" href="extensions/status/deck.status.css"><link rel="stylesheet" href="extensions/hash/deck.hash.css"><link rel="stylesheet" href="extensions/scale/deck.scale.css"><!-- Style theme. More available in /themes/style/ or create your own.--><link rel="stylesheet" href="themes/style/mnml.css"><!-- Transition. More available in /themes/transition/ or create your own.--><link rel="stylesheet" href="themes/transition/horizontal-slide.css"><!-- Plugin: CodeMirror--><link rel="stylesheet" href="plugins/codemirror/deck.codemirror.css"><link rel="stylesheet" href="plugins/codemirror/themes/default.css"><!-- Modernizr.--><script src="js/vendor/modernizr.custom.js"></script></head><body><div class="deck-container"><section id="title" class="slide"><h2>(Modern) JavaScript Testing</h2>
+
+<p><strong>Jake Luer</strong></p>
+
+<ul><li><strong>tw</strong>: <a href="http://twitter.com/jakeluer">@jakeluer</a></li><li><strong>gh</strong>: <a href="http://github.com/logicalparadox">@logicalparadox</a></li></ul></section><section id="poll" class="slide"><h1>Audience Poll</h1></section><section id="stack" class="slide"><h2>(modern) javascript stack</h2>
+
+<p><strong>client-side</strong></p>
+
+<ul><li>advanced data modelling and state syncronization</li><li>modular and reusable client-side template rendering</li><li>HTML5 transports and storage</li></ul>
+
+<p><strong>server-side</strong></p>
+
+<ul><li>node.js - streams, sockets, services</li><li>schema-less json databases</li></ul></section><section id="context" class="slide"><h2>context-based deployments</h2>
+
+<p><strong>hyper-connected</strong></p>
+
+<p>application that requires realtime or psuedo-realtime connection to backend services</p>
+
+<ul><li>social applciations / chat</li><li>analytical dashboards</li><li>multiplayer games</li></ul>
+
+<p><strong>tempermentally-connected</strong></p>
+
+<p>application that cannot rely on a consistent connection to backend services</p>
+
+<ul><li>mobile websites</li><li>mobile applications (phonegap, titanium, etc)</li><li>chrome packaged apps</li></ul></section><section id="challenges" class="slide"><h2>testing challenges</h2>
+
+<p><strong>environment challenges</strong></p>
+
+<ul><li>not all javascript is created equally (v8, spidermonkey, etc..)</li><li>consumer javascript usage is most fractured of an language language deployment</li><li>you can&#39;t please everybody</li></ul>
+
+<p><strong>application challenges</strong></p>
+
+<ul><li>mvc means complexity, complexity means more tests</li><li>more targets means more hacks to get it running &quot;everwhere&quot;</li><li>you can&#39;t please everybody</li></ul></section><section id="test-stack" class="slide"><h2>elements of a full testing stack</h2>
+
+<ol><li>isomorphic test runner / reporter</li><li>expressive, thin and extandable assertion library</li><li>multi-environment test automation; continous integration</li></ol></section><section id="mocha" class="slide"><h2>mocha - test framework</h2>
+
+<p><img alt="Chai Logo" src="logos/chai.png"/></p>
+
+<ul><li>tdd / bdd style test definitions</li><li>simple asyncronous testing</li><li>flexible / extendable reporting</li><li>isomorphic - node.js, browsers</li></ul>
+
+<h5><a href="http:://visionmedia.github.io/mocha">visionmedia.github.io/mocha</a></h5></section><section id="mocha-example" class="slide"><h2>mocha example</h2><textarea id="code" name="code" mode="javascript" runnable="false" style="display: none;" class="code">describe('Database', function() {
+  var db = new Database('localhost');
+  var one = new Conference({ location: 'Burgas' });
+  var two = new Conference({ location: 'Plovdiv' });
+  var three = new Conference({ location: 'Varna' });
+  
+  beforeEach(function(done) {
+    db.flush(function(err) {
+      if (err) return done(err);
+      db.save([ one, two, three ], done);
+    });
+  });
+  
+  describe('#find', function() {
+    it('responds with proper match', function(done) {
+      db.find({ location: 'Burgas' }, function(err, res) {
+        should.not.exist(err);
+        res.should.have.lengthOf(1);
+        done();
+      });
+    });
+  });
+});
+</textarea></section><section id="chai" class="slide"><h2>chai - assertion library</h2>
+
+<p><img alt="Chai Logo" src="logos/chai.png"/></p>
+
+<ul><li>three assertion styles</li><li>extendable with plugins</li><li>isomorphic - node.js, browsers</li></ul>
+
+<h5><a href="http:://chaijs.com">chaijs.com</a></h5></section><section id="chai-example" class="slide"><h2>chai example</h2><textarea id="code" name="code" mode="javascript" runnable="false" style="display: none;" class="code">var chai = require('chai');
+
+var assert = chai.assert;
+assert(true, 'classic assert');
+assert.typeOf('hello burgas!', 'string');
+assert.equal(win, 'rakia');
+
+var expect = chai.expect;
+expect(true).to.be.ok;
+expect('hello burgas!').to.be.a('string');
+expect(win).to.equal('rakia');
+
+var should = chai.should();
+should.exist(true);
+'hello burgas!'.should.be.a('string');
+win.should.equal('rakia');
+
+</textarea></section><section id="chai-plugins" class="slide"><h2>chai plugins</h2>
+
+<p>plugins provide new assertions, vendor integrations, and test patterns</p>
+
+<p><strong><a href="http://chaijs.com/plugins">chaijs.com/plugins</a></strong></p>
+
+<ul><li>sinon-chai, chai-spies</li><li>chai-jquery, chai-backbone</li><li>chai-json-schema</li></ul></section><section id="karma" class="slide"><h2>karma - test automation / ci</h2>
+
+<p>karma works with already existing testing stacks to provide test
+automation in a majority of browsers</p>
+
+<ul><li>run tests automatically in chrome, firefox, ie, etc</li><li>.. or headless in phantomjs</li><li>.. or in ci using saucelabs</li></ul>
+
+<h5><a href="http:://karma-runner.github.io">karma-runner.github.io</a></h5></section><section id="fin" class="slide"><h2>end</h2></section><!-- deck.navigation snippet--><a href="#" title="Previous" class="deck-prev-link">&#8592;</a><a href="#" title="Next" class="deck-next-link">&#8594;</a><!-- deck.status snippet--><p class="deck-status"><span class="deck-status-current"></span>/<span class="deck-status-total"></span></p><!-- deck.goto snippet--><form action="." method="get" class="goto-form"><label for="goto-slide">Go to slide:</label><input id="goto-slide" type="text" name="slidenum" list="goto-datalist"><datalist id="goto-datalist"></datalist><input type="submit" value="Go"></form><!--deck.hash snippet--><a href="." title="Permalink to this slide" class="deck-permalink">#</a></div><!-- Required JS files.--><script src="js/vendor/jquery-1.8.2.min.js"></script><script src="js/vendor/coffee-script-1.4.0.min.js"></script><script src="core/deck.core.js"></script><!-- Plugin: CodeMirror (with CoffeeScript enhancements).--><script src="plugins/codemirror/codemirror.js"></script><script src="plugins/codemirror/mode/javascript/javascript.js"></script><script src="plugins/codemirror/mode/coffeescript/coffeescript.js"></script><script src="plugins/codemirror/deck.codemirror.js"></script><!-- Extension JS files. Add or remove as needed.--><script src="extensions/hash/deck.hash.js"></script><script src="extensions/menu/deck.menu.js"></script><script src="extensions/goto/deck.goto.js"></script><script src="extensions/status/deck.status.js"></script><script src="extensions/navigation/deck.navigation.js"></script><script src="extensions/scale/deck.scale.js"></script><!-- Initialize the deck.--><script>$(function() {
+  $.deck('.slide', {
+    codemirror: {
+      lineNumbers: false,
+      theme: "default",
+      indentUnit: 2,
+      indentWithTabs: false,
+      runnable: false
+    }
+  });
+});</script></body></html>

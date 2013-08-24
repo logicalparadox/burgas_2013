@@ -1,0 +1,183 @@
+extends layout
+
+block slides
+  section.slide#title
+    :markdown
+      ## (Modern) JavaScript Testing
+
+      **Jake Luer**
+
+      * **tw**: [@jakeluer][tw]
+      * **gh**: [@logicalparadox][gh]
+
+
+      [tw]: http://twitter.com/jakeluer
+      [gh]: http://github.com/logicalparadox
+
+  section.slide#poll
+    h1 Audience Poll
+
+  section.slide#stack
+    :markdown
+      ## (modern) javascript stack
+
+      **client-side**
+
+      * advanced data modelling and state syncronization
+      * modular and reusable client-side template rendering
+      * HTML5 transports and storage
+
+      **server-side**
+
+      * node.js - streams, sockets, services
+      * schema-less json databases
+
+  section.slide#context
+    :markdown
+      ## context-based deployments
+
+      **hyper-connected**
+
+      application that requires realtime or psuedo-realtime connection to backend services
+
+      * social applciations / chat
+      * analytical dashboards
+      * multiplayer games
+
+      **tempermentally-connected**
+
+      application that cannot rely on a consistent connection to backend services
+
+      * mobile websites
+      * mobile applications (phonegap, titanium, etc)
+      * chrome packaged apps
+
+  section.slide#challenges
+    :markdown
+      ## testing challenges
+
+      **environment challenges**
+
+      * not all javascript is created equally (v8, spidermonkey, etc..)
+      * consumer javascript usage is most fractured of an language language deployment
+      * you can't please everybody
+
+      **application challenges**
+
+      * mvc means complexity, complexity means more tests
+      * more targets means more hacks to get it running "everwhere"
+      * you can't please everybody
+
+  section.slide#test-stack
+    :markdown
+      ## elements of a full testing stack
+
+      1. isomorphic test runner / reporter
+      1. expressive, thin and extandable assertion library
+      1. multi-environment test automation; continous integration
+
+  section.slide#mocha
+    :markdown
+      ## mocha - test framework
+
+      ![Chai Logo](logos/chai.png)
+
+      * tdd / bdd style test definitions
+      * simple asyncronous testing
+      * flexible / extendable reporting
+      * isomorphic - node.js, browsers
+
+      ##### [visionmedia.github.io/mocha](http:://visionmedia.github.io/mocha)
+
+  section.slide#mocha-example
+    :markdown
+      ## mocha example
+
+    textarea.code#code(name="code", mode="javascript", runnable="false", style="display: none;").
+      describe('Database', function() {
+        var db = new Database('localhost');
+        var one = new Conference({ location: 'Burgas' });
+        var two = new Conference({ location: 'Plovdiv' });
+        var three = new Conference({ location: 'Varna' });
+        
+        beforeEach(function(done) {
+          db.flush(function(err) {
+            if (err) return done(err);
+            db.save([ one, two, three ], done);
+          });
+        });
+        
+        describe('#find', function() {
+          it('responds with proper match', function(done) {
+            db.find({ location: 'Burgas' }, function(err, res) {
+              should.not.exist(err);
+              res.should.have.lengthOf(1);
+              done();
+            });
+          });
+        });
+      });
+
+  section.slide#chai
+    :markdown
+      ## chai - assertion library
+
+      ![Chai Logo](logos/chai.png)
+
+      * three assertion styles
+      * extendable with plugins
+      * isomorphic - node.js, browsers
+
+      ##### [chaijs.com](http:://chaijs.com)
+
+  section.slide#chai-example
+    :markdown
+      ## chai example
+
+    textarea.code#code(name="code", mode="javascript", runnable="false", style="display: none;").
+      var chai = require('chai');
+
+      var assert = chai.assert;
+      assert(true, 'classic assert');
+      assert.typeOf('hello burgas!', 'string');
+      assert.equal(win, 'rakia');
+
+      var expect = chai.expect;
+      expect(true).to.be.ok;
+      expect('hello burgas!').to.be.a('string');
+      expect(win).to.equal('rakia');
+
+      var should = chai.should();
+      should.exist(true);
+      'hello burgas!'.should.be.a('string');
+      win.should.equal('rakia');
+
+
+  section.slide#chai-plugins
+    :markdown
+      ## chai plugins
+
+      plugins provide new assertions, vendor integrations, and test patterns
+
+      **[chaijs.com/plugins](http://chaijs.com/plugins)**
+
+      * sinon-chai, chai-spies
+      * chai-jquery, chai-backbone
+      * chai-json-schema
+
+  section.slide#karma
+    :markdown
+      ## karma - test automation / ci
+
+      karma works with already existing testing stacks to provide test
+      automation in a majority of browsers
+
+      * run tests automatically in chrome, firefox, ie, etc
+      * .. or headless in phantomjs
+      * .. or in ci using saucelabs
+      
+      ##### [karma-runner.github.io](http:://karma-runner.github.io)
+
+  section.slide#fin
+    :markdown
+      ## end
